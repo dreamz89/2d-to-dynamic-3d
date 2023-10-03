@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ThreeDObjectGenerator :geometry="GEOMETRY" :editableHeight="1" />
+    <ThreeDObjectGenerator :geometry="GEOMETRY" :editableHeight="height" />
   </div>
 </template>
 
@@ -11,8 +11,21 @@ export default {
   components: {
     ThreeDObjectGenerator,
   },
+  data() {
+    return {
+      height: 1
+    }
+  },
   created() {
     this.GEOMETRY = [[0,0], [7,12], [0,14]]
+
+    setTimeout(() => {
+      this.height = 2
+    }, 1000)
+
+    setTimeout(() => {
+      this.height = 1
+    }, 2000)
   }
 }
 </script>

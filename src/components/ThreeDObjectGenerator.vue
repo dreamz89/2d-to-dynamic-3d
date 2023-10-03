@@ -5,10 +5,11 @@
 <script setup>
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps({
-  geometry: Array
+  geometry: Array,
+  editableHeight: Number
 })
 
 const sizes = {
@@ -17,6 +18,7 @@ const sizes = {
 }
 const canvas = ref(null)
 const scene = new THREE.Scene()
+const extrudeGeometry = createExtrudeGeometry()
 const mesh = createMesh()
 const camera = createCamera()
 let renderer
@@ -29,7 +31,14 @@ onMounted(() => {
   setAnimation()
 })
 
-function createMesh() {
+watch(
+  () => props.editableHeight,
+  (newHeight) => {
+    mesh.scale.z = newHeight
+  }
+)
+
+function createExtrudeGeometry() {
   const shape = new THREE.Shape()
   const startingPoint = props.geometry[0]
 
@@ -42,11 +51,16 @@ function createMesh() {
 
   const extrudeSettings = {
     steps: 1,
-    depth: 1,
-    bevelEnabled: false,
+    depth: props.editableHeight,
+    bevelEnabled: false
   }
 
-  const extrudeGeometry = new THREE.ExtrudeGeometry( shape, extrudeSettings )
+  const extrudeGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
+
+  return extrudeGeometry
+}
+
+function createMesh() {
   const materialTop = new THREE.MeshBasicMaterial({ color: 0xff0000 })
   const materialSides = new THREE.MeshBasicMaterial({ color: 'blue' })
   const mesh = new THREE.Mesh(extrudeGeometry, [materialTop, materialSides])
