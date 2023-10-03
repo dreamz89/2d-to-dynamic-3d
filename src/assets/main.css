@@ -5,3 +5,11 @@ canvas {
   top: 0;
   left: 0;
 }
+
+#gui {
+  top: 50px;
+  
+  .close-button {
+    bottom: 100%;
+  }
+}
