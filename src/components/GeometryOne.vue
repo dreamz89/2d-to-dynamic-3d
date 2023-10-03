@@ -1,5 +1,5 @@
 <template>
-  <ThreeDObjectGenerator :geometry="GEOMETRY" :editableHeight="height" />
+  <ThreeDObjectGenerator :geometry="GEOMETRY" :color="color" :editableHeight="height" />
 </template>
 
 <script>
@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      color: '#008080',
       height: 1
     }
   },
@@ -25,6 +26,7 @@ export default {
       const gui = new GUI()
       gui.domElement.id = 'gui'
       gui.add(this, 'height').min(0).max(5).step(1)
+      gui.addColor(this, 'color')
     }
   }
 }

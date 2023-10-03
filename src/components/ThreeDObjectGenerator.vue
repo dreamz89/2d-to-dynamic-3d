@@ -9,9 +9,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 export default {
   props: {
     geometry: Array,
+    color: String,
     editableHeight: Number
   },
   watch: {
+    color(newColor) {
+      this.mesh.material.color.set(newColor)
+    },
     editableHeight(newHeight) {
       this.mesh.scale.z = newHeight
     }
@@ -54,9 +58,9 @@ export default {
       return extrudeGeometry
     },
     createMesh() {
-      const materialTop = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-      const materialSides = new THREE.MeshBasicMaterial({ color: 'blue' })
-      const mesh = new THREE.Mesh(this.extrudeGeometry, [materialTop, materialSides])
+      const material = new THREE.MeshBasicMaterial({ color: this.color })
+      const mesh = new THREE.Mesh(this.extrudeGeometry, material)
+ 
       mesh.rotation.x = - Math.PI / 2
       mesh.geometry.center()
       this.scene.add(mesh)
